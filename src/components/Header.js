@@ -13,7 +13,7 @@ const Header = () => {
       <div className="main-header">
         {/* Logo */}
         <div className="logo">
-          <img src="/assets/logo.png" alt="Logo" className="logo-image" />
+          <img src="/assets/logo.svg" alt="Logo" className="logo-image" />
         </div>
 
         {/* Navigation links */}
