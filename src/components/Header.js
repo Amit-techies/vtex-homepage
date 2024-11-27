@@ -6,7 +6,7 @@ const Header = () => {
     <header className="header">
       {/* Top bar with discounts */}
       <div className="top-bar">
-        <span className="discount">خصومات الجملة - خصم 30%</span>
+        <span className="discount">White Friday Sale - 30% off </span>
       </div>
 
       {/* Main header with logo, language, cart, and other elements */}
