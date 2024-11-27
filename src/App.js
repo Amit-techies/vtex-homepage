@@ -1,64 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import Banner from './components/banner';
+import Header from './components/Header';
 
 const App = () => {
- 
-  const [products, setProducts] = useState([]); // State to store products of a specific collection
-  const [error, setError] = useState(null); // State to handle errors
-  const [selectedCollectionId, setSelectedCollectionId] = useState(138); // Default collection ID
-
-
-
-  // Fetch products of the selected collection
-  useEffect(() => {
-    const fetchCollectionProducts = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/collections/${selectedCollectionId}/products`
-        );
-        setProducts(response.data.Data || []); // Handle 'Data' key in the response
-      } catch (error) {
-        console.error('Error fetching products for collection:', error);
-        setError('Failed to fetch products for the selected collection.');
-      }
-    };
-
-    if (selectedCollectionId) {
-      fetchCollectionProducts();
-    }
-  }, [selectedCollectionId]); // Refetch products when collection ID changes
+  const defaultImage = 'https://via.placeholder.com/200'; // Placeholder image if no product image
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+    <div style={{fontFamily: 'Arial, sans-serif' }}>
+      <Header />
+
      
+      <Banner 
+      customText="Exclusive Spring Collection!"
+      collectionId={138} 
+      customImage="/asset/banner1.jpg"
+      defaultImage={defaultImage} />
 
+      <Banner 
+      customText="Exclusive Spring Collection!"
+      collectionId={137} 
+      customImage="/asset/banner2.jpg"
+      defaultImage={defaultImage} />
       
-
-      {/* Products Section */}
-      <section>
-        
-        <div>
-          {products.length > 0 ? (
-            products.map((product) => (
-              <div key={product.ProductId} style={{ marginBottom: '20px' }}>
-                
-                {product.SkuImageUrl && (
-                  <img
-                    src={product.SkuImageUrl}
-                    alt={product.ProductName}
-                    width="200"
-                    style={{ marginBottom: '10px' }}
-                  />
-                )}
-                
-                <h3>{product.ProductName}</h3>
-              </div>
-            ))
-          ) : (
-            <p>No products available for this collection.</p>
-          )}
-        </div>
-      </section>
     </div>
   );
 };

@@ -1,0 +1,102 @@
+
+  
+  /* Styling for top bar with discounts */
+  .top-bar {
+    background-color: #ff6699;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  /* Main header section */
+  .main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #fff;
+  }
+  
+  /* Logo Styling */
+  .logo-image {
+    height: 50px;
+  }
+  
+  /* Navigation links */
+  .nav-links ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .nav-links a:hover {
+    color: #ff6699;
+  }
+  
+  /* Right section - Account, Language, Cart, Search */
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  /* Login Section */
+  .login {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  /* Language and Country */
+  .language-country {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  /* Flag icon */
+  .flag-icon {
+    width: 20px;
+    height: 15px;
+  }
+  
+  /* Cart Section */
+  .cart {
+    position: relative;
+  }
+  
+  .cart img {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 50%;
+  }
+  
+  /* Search Bar */
+  .search input {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+  }
+  
