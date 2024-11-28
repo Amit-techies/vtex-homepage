@@ -31,14 +31,7 @@ const Banner = ({ collectionId, defaultImage, customText, customImage }) => {
         {customImage && (
           <img
             src={customImage}
-            alt="Banner"
-            style={{
-              width: '100%',
-              height: 'auto',
-              maxHeight: '400px',
-              objectFit: 'cover',
-              borderRadius: '10px',
-            }}
+            alt="Banner"            
           />
         )}
         {customText && (
