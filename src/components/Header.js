@@ -21,18 +21,19 @@ const Header = () => {
         {/* Navigation links */}
         <nav className="nav-links">
           <ul>
-            <li><a href="#">ملابس مريضة</a></li>
-            <li><a href="#">إكسسوارات</a></li>
-            <li><a href="#">مجموعات</a></li>
-            <li><a href="#">فساتين والقفاطنات</a></li>
-            <li><a href="#">الإصدارات الجديدة</a></li>
+            <li><a href="#">New In</a></li>
+            <li><a href="#">Clothing</a></li>
+            <li><a href="#">Dresses & Kaftans</a></li>
+            <li><a href="#">Loungewear</a></li>
+            <li><a href="#">Accessories</a></li>
+            <li><a href="#">Collections</a></li>
           </ul>
         </nav>
 
         {/* Right section with account, language, and cart */}
         <div className="header-right">
           {/* Account/Login */}
-          <a href="#" className="login">تسجيل الدخول / تسجيل حساب جديد</a>
+          <a href="#" className="login">Sign in/Sign up</a>
 
           {/* Language and Country */}
           <div className="language-country">
