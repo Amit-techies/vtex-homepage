@@ -17,7 +17,7 @@ const CustomerForm = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/api/customers', formData);
+      const response = await axios.post('https://vtex-backend-3.onrender.com/api/customers', formData);
       setMessage(`Customer created successfully: ${response.data.Id}`);
     } catch (error) {
       setMessage('Failed to create customer: ' + error.message);
