@@ -1,26 +1,19 @@
 import React from 'react';
-import Banner from './components/banner';
-import Header from './components/Header';
 import CustomerForm from './components/CustomerForm';
-import CustomerProfile from './components/CustomerProfile';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const App = () => {
-  const defaultImage = 'https://via.placeholder.com/200'; // Placeholder image if no product image
-
   return (
-    <div style={{fontFamily: 'Arial, sans-serif' }}>
-      <Header />
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+      {/* Header */}
+      <header className="mb-4">
+        <h1>Customer Management</h1>
+        <p>Create new customer profiles in VTEX easily.</p>
+      </header>
 
-     
-      
-      
-      <Router>
-      <Routes>
-        <Route path="/" element={<CustomerForm />} />
-        <Route path="/customer/:customerId" element={<CustomerProfile />} />
-      </Routes>
-    </Router>
+      {/* Customer Form */}
+      <main>
+        <CustomerForm />
+      </main>
     </div>
   );
 };
