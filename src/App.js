@@ -13,17 +13,7 @@ const App = () => {
       <Header />
 
      
-      <Banner 
-      customText="Exclusive Spring Collection!"
-      collectionId={138} 
-      customImage="/asset/banner1.jpg"
-      defaultImage={defaultImage} />
-
-      <Banner      
-      customText="Exclusive Spring Collection!"
-      collectionId={137} 
-      customImage="/asset/banner2.jpg"
-      defaultImage={defaultImage} />
+      
       
       <Router>
       <Routes>
