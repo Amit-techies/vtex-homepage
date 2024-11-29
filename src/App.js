@@ -22,7 +22,13 @@ const App = () => {
       collectionId={137} 
       customImage="/asset/banner2.jpg"
       defaultImage={defaultImage} />
-      <CustomerForm />
+      
+      <Router>
+      <Routes>
+        <Route path="/" element={<CustomerForm />} />
+        <Route path="/customer/:customerId" element={<CustomerProfile />} />
+      </Routes>
+    </Router>
     </div>
   );
 };

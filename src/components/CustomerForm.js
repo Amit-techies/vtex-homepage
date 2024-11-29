@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // For navigation to profile page
 
 const CustomerForm = () => {
   const [formData, setFormData] = useState({
@@ -8,19 +9,28 @@ const CustomerForm = () => {
     email: '',
     phone: '',
     document: '',
+    password: '', // New password field
   });
 
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate(); // Hook for navigation
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage(''); // Clear previous messages
+    setError('');
 
     try {
+      // Submit the form data to the backend
       const response = await axios.post('https://vtex-backend-3.onrender.com/api/customers', formData);
-      setMessage(`Customer created successfully: ${response.data.Id}`);
+      const customerId = response.data.Id;
+
+      // Redirect to customer profile page
+      navigate(`/customer/${customerId}`);
     } catch (error) {
-      setMessage('Failed to create customer: ' + error.message);
+      setError('Failed to create customer: ' + (error.response?.data?.message || error.message));
     }
   };
 
@@ -33,7 +43,13 @@ const CustomerForm = () => {
   return (
     <div className="container mt-5">
       <h1>Create Customer Profile</h1>
+
+      {/* Error and Success Messages */}
+      {message && <div className="alert alert-success">{message}</div>}
+      {error && <div className="alert alert-danger">{error}</div>}
+
       <form onSubmit={handleSubmit}>
+        {/* First Name */}
         <div className="mb-3">
           <label htmlFor="firstName" className="form-label">
             First Name
@@ -49,6 +65,7 @@ const CustomerForm = () => {
           />
         </div>
 
+        {/* Last Name */}
         <div className="mb-3">
           <label htmlFor="lastName" className="form-label">
             Last Name
@@ -64,6 +81,7 @@ const CustomerForm = () => {
           />
         </div>
 
+        {/* Email */}
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
             Email
@@ -79,6 +97,7 @@ const CustomerForm = () => {
           />
         </div>
 
+        {/* Phone */}
         <div className="mb-3">
           <label htmlFor="phone" className="form-label">
             Phone
@@ -94,6 +113,7 @@ const CustomerForm = () => {
           />
         </div>
 
+        {/* Document */}
         <div className="mb-3">
           <label htmlFor="document" className="form-label">
             Document
@@ -109,12 +129,27 @@ const CustomerForm = () => {
           />
         </div>
 
+        {/* Password */}
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        {/* Submit Button */}
         <button type="submit" className="btn btn-primary">
           Submit
         </button>
       </form>
-
-      {message && <p className="mt-3">{message}</p>}
     </div>
   );
 };
