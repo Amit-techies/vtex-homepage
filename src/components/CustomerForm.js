@@ -2,119 +2,108 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const CustomerForm = () => {
-  const [formData, setFormData] = useState({
+  const [customerData, setCustomerData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
-    document: '',
   });
 
-  const [message, setMessage] = useState('');
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState('');
+
+  // Handle input field change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCustomerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://vtex-backend-3.onrender.com/api/customers', formData);
-      setMessage(`Customer created successfully: ${response.data.Id}`);
-    } catch (error) {
-      setMessage('Failed to create customer: ' + error.message);
+      const res = await axios.post('https://vtex-backend-3.onrender.com/api/customers', customerData);
+      setResponse(res.data);  // Set the response data
+      setError('');  // Clear any previous error
+    } catch (err) {
+      console.error('Error creating customer:', err);
+      setError('Failed to create customer. Please try again.');
+      setResponse(null);  // Clear any previous response
     }
   };
 
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
   return (
-    <div className="container mt-5">
-      <h1>Create Customer Profile</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="firstName" className="form-label">
-            First Name
-          </label>
+    <div>
+      <h2>Create Customer Profile</h2>
+      <form onSubmit={handleSubmit} style={{ maxWidth: '400px', margin: '0 auto' }}>
+        <div className="form-group">
+          <label>First Name:</label>
           <input
             type="text"
-            className="form-control"
-            id="firstName"
             name="firstName"
-            value={formData.firstName}
+            value={customerData.firstName}
             onChange={handleChange}
             required
+            className="form-control"
           />
         </div>
-
-        <div className="mb-3">
-          <label htmlFor="lastName" className="form-label">
-            Last Name
-          </label>
+        <div className="form-group">
+          <label>Last Name:</label>
           <input
             type="text"
-            className="form-control"
-            id="lastName"
             name="lastName"
-            value={formData.lastName}
+            value={customerData.lastName}
             onChange={handleChange}
             required
+            className="form-control"
           />
         </div>
-
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
+        <div className="form-group">
+          <label>Email:</label>
           <input
             type="email"
-            className="form-control"
-            id="email"
             name="email"
-            value={formData.email}
+            value={customerData.email}
             onChange={handleChange}
             required
+            className="form-control"
           />
         </div>
-
-        <div className="mb-3">
-          <label htmlFor="phone" className="form-label">
-            Phone
-          </label>
+        <div className="form-group">
+          <label>Phone:</label>
           <input
             type="text"
-            className="form-control"
-            id="phone"
             name="phone"
-            value={formData.phone}
+            value={customerData.phone}
             onChange={handleChange}
             required
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="document" className="form-label">
-            Document
-          </label>
-          <input
-            type="text"
             className="form-control"
-            id="document"
-            name="document"
-            value={formData.document}
-            onChange={handleChange}
-            required
           />
         </div>
-
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
+        <button type="submit" className="btn btn-primary">Create Customer</button>
       </form>
 
-      {message && <p className="mt-3">{message}</p>}
+      {/* Show success or error message */}
+      {response && (
+        <div className="mt-4">
+          <h3>Customer Created Successfully!</h3>
+          <p>
+            Customer ID: {response.Id}
+            <br />
+            Document ID: {response.DocumentId}
+            <br />
+            <a href={response.Href} target="_blank" rel="noopener noreferrer">
+              View Customer Profile
+            </a>
+          </p>
+        </div>
+      )}
+
+      {error && <div style={{ color: 'red', marginTop: '10px' }}>{error}</div>}
     </div>
   );
 };
