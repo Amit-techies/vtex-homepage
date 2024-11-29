@@ -1,110 +1,73 @@
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const CustomerForm = () => {
-  const [customerData, setCustomerData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-  });
-
-  const [response, setResponse] = useState(null);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // Hook for navigation
 
-  // Handle input field change
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCustomerData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
 
     try {
-      const res = await axios.post('https://vtex-backend-3.onrender.com/api/customers', customerData);
-      setResponse(res.data);  // Set the response data
-      setError('');  // Clear any previous error
-    } catch (err) {
-      console.error('Error creating customer:', err);
-      setError('Failed to create customer. Please try again.');
-      setResponse(null);  // Clear any previous response
+      const response = await axios.post('https://vtex-backend-3.onrender.com/api/dataentities/CL/documents', {
+        FirstName: firstName,
+        LastName: lastName,
+        Email: email,
+      });
+
+      // Redirect to the profile page of the newly created customer
+      const customerId = response.data.DocumentId;
+      navigate(`/profile/${customerId}`);
+    } catch (error) {
+      setError('Failed to create customer profile.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div>
-      <h2>Create Customer Profile</h2>
-      <form onSubmit={handleSubmit} style={{ maxWidth: '400px', margin: '0 auto' }}>
-        <div className="form-group">
+      <h2>Create New Customer Profile</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
           <label>First Name:</label>
           <input
             type="text"
-            name="firstName"
-            value={customerData.firstName}
-            onChange={handleChange}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             required
-            className="form-control"
           />
         </div>
-        <div className="form-group">
+        <div>
           <label>Last Name:</label>
           <input
             type="text"
-            name="lastName"
-            value={customerData.lastName}
-            onChange={handleChange}
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
             required
-            className="form-control"
           />
         </div>
-        <div className="form-group">
+        <div>
           <label>Email:</label>
           <input
             type="email"
-            name="email"
-            value={customerData.email}
-            onChange={handleChange}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
-            className="form-control"
           />
         </div>
-        <div className="form-group">
-          <label>Phone:</label>
-          <input
-            type="text"
-            name="phone"
-            value={customerData.phone}
-            onChange={handleChange}
-            required
-            className="form-control"
-          />
-        </div>
-        <button type="submit" className="btn btn-primary">Create Customer</button>
+        {error && <div style={{ color: 'red' }}>{error}</div>}
+        <button type="submit" disabled={loading}>
+          {loading ? 'Creating...' : 'Create Profile'}
+        </button>
       </form>
-
-      {/* Show success or error message */}
-      {response && (
-        <div className="mt-4">
-          <h3>Customer Created Successfully!</h3>
-          <p>
-            Customer ID: {response.Id}
-            <br />
-            Document ID: {response.DocumentId}
-            <br />
-            <a href={response.Href} target="_blank" rel="noopener noreferrer">
-              View Customer Profile
-            </a>
-          </p>
-        </div>
-      )}
-
-      {error && <div style={{ color: 'red', marginTop: '10px' }}>{error}</div>}
     </div>
   );
 };
