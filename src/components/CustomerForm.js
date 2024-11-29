@@ -23,7 +23,7 @@ const CustomerForm = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/customers', formData);
+      const response = await axios.post('https://vtex-backend-3.onrender.com/api/customers', formData);
       const customerId = response.data.Id;
 
       // Redirect to the customer profile page
