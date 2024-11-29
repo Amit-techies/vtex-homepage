@@ -16,12 +16,12 @@ const App = () => {
       customImage="/asset/banner1.jpg"
       defaultImage={defaultImage} />
 
-      <Banner 
+      <Banner      
       customText="Exclusive Spring Collection!"
       collectionId={137} 
       customImage="/asset/banner2.jpg"
       defaultImage={defaultImage} />
-      
+      <CustomerForm />
     </div>
   );
 };
