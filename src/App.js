@@ -1,23 +1,49 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import CustomerForm from './components/CustomerForm';
-import CustomerDetails from './components/CustomerDetails'; // Component to display customer details
+import AddressForm from './components/AddressForm';
 
 const App = () => {
+  const [customerId, setCustomerId] = useState(null); // State to store the created customer ID
+
+  const handleCustomerCreated = (id) => {
+    setCustomerId(id); // Set customer ID when customer is created
+  };
+
   return (
     <Router>
-      <div>
-        <h1 className="text-center my-4">Customer Management</h1>
+      <div className="container mt-5">
+        <h1>Customer Management</h1>
         <Routes>
-          {/* Route for the customer creation form */}
-          <Route path="/" element={<CustomerForm />} />
+          {/* Route to create a customer */}
+          <Route
+            path="/"
+            element={<CustomerForm onCustomerCreated={handleCustomerCreated} />}
+          />
 
-          {/* Route for the customer details page */}
-          <Route path="/customer/:id" element={<CustomerDetails />} />
+          {/* Route to add an address */}
+          <Route
+            path="/add-address"
+            element={
+              customerId ? (
+                <AddressForm userId={customerId} />
+              ) : (
+                <RedirectToCustomerForm />
+              )
+            }
+          />
         </Routes>
       </div>
     </Router>
   );
+};
+
+const RedirectToCustomerForm = () => {
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    navigate('/');
+  }, [navigate]);
+  return null;
 };
 
 export default App;
