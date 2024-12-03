@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import AddressForm from './AddressForm'; // Import AddressForm component
 
 const CustomerForm = () => {
   const [formData, setFormData] = useState({
@@ -40,7 +41,7 @@ const CustomerForm = () => {
       setCustomerId(customerId); // Store the customerId
       setMessage(`Customer created successfully: ${customerId}`);
       
-      // Optionally navigate to another page
+      // Optionally navigate to another page (not needed if you want to add address immediately)
       navigate(`/customer/${customerId}`);
     } catch (error) {
       console.error('Error creating customer:', error);
@@ -175,6 +176,9 @@ const CustomerForm = () => {
           Create Customer
         </button>
       </form>
+
+      {/* Show AddressForm only after customer is created */}
+      {customerId && <AddressForm userId={customerId} />}
     </div>
   );
 };
