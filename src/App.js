@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import CustomerForm from './CustomerForm';
-import CustomerDetails from './CustomerDetails'; // Component to display customer details
+import CustomerForm from './components/CustomerForm';
+import CustomerDetails from './components/CustomerDetails'; // Component to display customer details
 
 const App = () => {
   return (
