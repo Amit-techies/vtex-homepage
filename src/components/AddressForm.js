@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const AddressForm = ({ userId }) => {
-  const [formData, setFormData] = useState({
+  const [addressData, setAddressData] = useState({
     addressName: '',
     addressType: 'residential',
     city: '',
     complement: '',
-    country: '',
+    country: 'USA',
     postalCode: '',
     receiverName: '',
     reference: '',
@@ -15,30 +15,30 @@ const AddressForm = ({ userId }) => {
     street: '',
     neighborhood: '',
     number: '',
-    userId: userId || '', // Populate with customer ID
+    userId,
   });
 
   const [message, setMessage] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setAddressData({ ...addressData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://vtex-backend-3.onrender.com/api/addresses', formData);
-      setMessage(`Address created successfully: ${response.data.data.Id}`);
+      const response = await axios.post('https://vtex-backend-3.onrender.com/api/addresses', addressData);
+      setMessage('Address created successfully.');
     } catch (error) {
-      console.error('Error creating address:', error);
-      setMessage('Failed to create address. Please try again.');
+      console.error('Error creating address:', error.response?.data || error.message);
+      setMessage('Failed to create address.');
     }
   };
 
   return (
     <div className="container mt-5">
-      <h2>Create Address</h2>
+      <h2>Add Address</h2>
       {message && <div className="alert alert-info">{message}</div>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -47,29 +47,41 @@ const AddressForm = ({ userId }) => {
             type="text"
             name="addressName"
             className="form-control"
-            value={formData.addressName}
+            value={addressData.addressName}
             onChange={handleInputChange}
             required
           />
         </div>
         <div className="form-group">
           <label>Address Type</label>
-          <input
-            type="text"
+          <select
             name="addressType"
             className="form-control"
-            value={formData.addressType}
+            value={addressData.addressType}
             onChange={handleInputChange}
-          />
+          >
+            <option value="residential">Residential</option>
+            <option value="commercial">Commercial</option>
+          </select>
         </div>
-        {/* Repeat similar structure for other fields */}
         <div className="form-group">
           <label>City</label>
           <input
             type="text"
             name="city"
             className="form-control"
-            value={formData.city}
+            value={addressData.city}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>State</label>
+          <input
+            type="text"
+            name="state"
+            className="form-control"
+            value={addressData.state}
             onChange={handleInputChange}
             required
           />
@@ -80,7 +92,7 @@ const AddressForm = ({ userId }) => {
             type="text"
             name="street"
             className="form-control"
-            value={formData.street}
+            value={addressData.street}
             onChange={handleInputChange}
             required
           />
@@ -91,12 +103,14 @@ const AddressForm = ({ userId }) => {
             type="text"
             name="number"
             className="form-control"
-            value={formData.number}
+            value={addressData.number}
             onChange={handleInputChange}
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary mt-3">Create Address</button>
+        <button type="submit" className="btn btn-primary mt-3">
+          Add Address
+        </button>
       </form>
     </div>
   );
