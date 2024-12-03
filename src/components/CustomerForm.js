@@ -1,110 +1,145 @@
-
 import React, { useState } from 'react';
 import axios from 'axios';
 
 const CustomerForm = () => {
-  const [customerData, setCustomerData] = useState({
+  const [formData, setFormData] = useState({
+    email: '',
     firstName: '',
     lastName: '',
-    email: '',
     phone: '',
+    documentType: '',
+    document: '',
+    isCorporate: false,
+    isNewsletterOptIn: false,
+    localeDefault: 'en-US',
   });
 
-  const [response, setResponse] = useState(null);
-  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
-  // Handle input field change
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCustomerData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value,
+    });
   };
 
-  // Handle form submission
+  // Submit form to create customer
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const res = await axios.post('https://vtex-backend-3.onrender.com/api/customers', customerData);
-      setResponse(res.data);  // Set the response data
-      setError('');  // Clear any previous error
-    } catch (err) {
-      console.error('Error creating customer:', err);
-      setError('Failed to create customer. Please try again.');
-      setResponse(null);  // Clear any previous response
+      const response = await axios.post('http://localhost:5000/api/customers', formData);
+      setMessage(`Customer created successfully: ${response.data.id}`);
+    } catch (error) {
+      console.error('Error creating customer:', error);
+      setMessage('Failed to create customer. Please try again.');
     }
   };
 
   return (
-    <div>
+    <div className="container mt-5">
       <h2>Create Customer Profile</h2>
-      <form onSubmit={handleSubmit} style={{ maxWidth: '400px', margin: '0 auto' }}>
+      {message && <div className="alert alert-info">{message}</div>}
+      <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>First Name:</label>
-          <input
-            type="text"
-            name="firstName"
-            value={customerData.firstName}
-            onChange={handleChange}
-            required
-            className="form-control"
-          />
-        </div>
-        <div className="form-group">
-          <label>Last Name:</label>
-          <input
-            type="text"
-            name="lastName"
-            value={customerData.lastName}
-            onChange={handleChange}
-            required
-            className="form-control"
-          />
-        </div>
-        <div className="form-group">
-          <label>Email:</label>
+          <label>Email</label>
           <input
             type="email"
             name="email"
-            value={customerData.email}
-            onChange={handleChange}
-            required
             className="form-control"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
           />
         </div>
         <div className="form-group">
-          <label>Phone:</label>
+          <label>First Name</label>
+          <input
+            type="text"
+            name="firstName"
+            className="form-control"
+            value={formData.firstName}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Last Name</label>
+          <input
+            type="text"
+            name="lastName"
+            className="form-control"
+            value={formData.lastName}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Phone</label>
           <input
             type="text"
             name="phone"
-            value={customerData.phone}
-            onChange={handleChange}
-            required
             className="form-control"
+            value={formData.phone}
+            onChange={handleInputChange}
+            required
           />
         </div>
-        <button type="submit" className="btn btn-primary">Create Customer</button>
-      </form>
-
-      {/* Show success or error message */}
-      {response && (
-        <div className="mt-4">
-          <h3>Customer Created Successfully!</h3>
-          <p>
-            Customer ID: {response.Id}
-            <br />
-            Document ID: {response.DocumentId}
-            <br />
-            <a href={response.Href} target="_blank" rel="noopener noreferrer">
-              View Customer Profile
-            </a>
-          </p>
+        <div className="form-group">
+          <label>Document Type</label>
+          <input
+            type="text"
+            name="documentType"
+            className="form-control"
+            value={formData.documentType}
+            onChange={handleInputChange}
+            required
+          />
         </div>
-      )}
-
-      {error && <div style={{ color: 'red', marginTop: '10px' }}>{error}</div>}
+        <div className="form-group">
+          <label>Document</label>
+          <input
+            type="text"
+            name="document"
+            className="form-control"
+            value={formData.document}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="form-check">
+          <input
+            type="checkbox"
+            name="isCorporate"
+            className="form-check-input"
+            checked={formData.isCorporate}
+            onChange={handleInputChange}
+          />
+          <label className="form-check-label">Is Corporate</label>
+        </div>
+        <div className="form-check">
+          <input
+            type="checkbox"
+            name="isNewsletterOptIn"
+            className="form-check-input"
+            checked={formData.isNewsletterOptIn}
+            onChange={handleInputChange}
+          />
+          <label className="form-check-label">Subscribe to Newsletter</label>
+        </div>
+        <div className="form-group">
+          <label>Locale Default</label>
+          <input
+            type="text"
+            name="localeDefault"
+            className="form-control"
+            value={formData.localeDefault}
+            onChange={handleInputChange}
+          />
+        </div>
+        <button type="submit" className="btn btn-primary mt-3">Create Customer</button>
+      </form>
     </div>
   );
 };
