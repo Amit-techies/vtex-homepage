@@ -42,7 +42,7 @@ const CustomerForm = () => {
     try {
       // Step 1: Create Customer Profile
       const customerResponse = await axios.post(
-        'https://{accountName}.{environment}.com.br/api/dataentities/CL/documents',
+        'https://iamtechiepartneruae.vtexcommercestable.com.br/api/dataentities/CL/documents',
         {
           email: formData.email,
           firstName: formData.firstName,
@@ -57,10 +57,10 @@ const CustomerForm = () => {
 
       const customerId = customerResponse.data.data.Id; // Get customer ID from response
       setMessage(`Customer created successfully: ${customerId}`);
-
+      
       // Step 2: Create Address for the Customer
       const addressResponse = await axios.post(
-        'https://{accountName}.{environment}.com.br/api/dataentities/AD/documents',
+        'https://iamtechiepartneruae.vtexcommercestable.com.br/api/dataentities/AD/documents',
         {
           addressName: formData.addressName,
           addressType: formData.addressType,
