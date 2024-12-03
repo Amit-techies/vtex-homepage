@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import AddressForm from './AddressForm'; // Import AddressForm component
 
 const CustomerForm = () => {
   const [formData, setFormData] = useState({
@@ -16,10 +15,11 @@ const CustomerForm = () => {
     localeDefault: 'en-US',
   });
 
-  const [customerId, setCustomerId] = useState(null); // Store the customerId after creating a customer
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // Handle input field changes
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -28,32 +28,34 @@ const CustomerForm = () => {
     });
   };
 
+  // Form submission handler
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage('');
+    setError('');
     try {
-      // Send customer data to backend for profile creation
       const response = await axios.post(
         'https://vtex-backend-3.onrender.com/api/customers',
         formData
       );
-      
-      const customerId = response.data.data.Id; // Extract customer Id
-      setCustomerId(customerId); // Store the customerId
-      setMessage(`Customer created successfully: ${customerId}`);
-      
-      // Optionally navigate to another page (e.g., customer profile)
+      const customerId = response.data.data.Id; // Adjust this based on the actual response structure
+      setMessage(`Customer profile created successfully! Customer ID: ${customerId}`);
       navigate(`/customer/${customerId}`);
-    } catch (error) {
-      console.error('Error creating customer:', error);
-      setMessage('Failed to create customer. Please try again.');
+    } catch (err) {
+      console.error('Error creating customer:', err.response?.data || err.message);
+      setError(
+        err.response?.data?.error || 'An error occurred while creating the customer profile.'
+      );
     }
   };
 
   return (
     <div className="container mt-5">
       <h2>Create Customer Profile</h2>
-      {message && <div className="alert alert-info">{message}</div>}
+      {message && <div className="alert alert-success">{message}</div>}
+      {error && <div className="alert alert-danger">{error}</div>}
       <form onSubmit={handleSubmit}>
+        {/* Email field */}
         <div className="form-group">
           <label>Email</label>
           <input
@@ -66,6 +68,7 @@ const CustomerForm = () => {
           />
         </div>
 
+        {/* First Name field */}
         <div className="form-group">
           <label>First Name</label>
           <input
@@ -78,6 +81,7 @@ const CustomerForm = () => {
           />
         </div>
 
+        {/* Last Name field */}
         <div className="form-group">
           <label>Last Name</label>
           <input
@@ -90,28 +94,36 @@ const CustomerForm = () => {
           />
         </div>
 
+        {/* Phone field */}
         <div className="form-group">
           <label>Phone</label>
           <input
-            type="text"
+            type="tel"
             name="phone"
             className="form-control"
             value={formData.phone}
             onChange={handleInputChange}
+            required
           />
         </div>
 
+        {/* Document Type field */}
         <div className="form-group">
           <label>Document Type</label>
-          <input
-            type="text"
+          <select
             name="documentType"
             className="form-control"
             value={formData.documentType}
             onChange={handleInputChange}
-          />
+            required
+          >
+            <option value="">Select Document Type</option>
+            <option value="CPF">CPF</option>
+            <option value="CNPJ">CNPJ</option>
+          </select>
         </div>
 
+        {/* Document field */}
         <div className="form-group">
           <label>Document</label>
           <input
@@ -120,31 +132,37 @@ const CustomerForm = () => {
             className="form-control"
             value={formData.document}
             onChange={handleInputChange}
+            required
           />
         </div>
 
-        <div className="form-group">
-          <label>Corporate</label>
+        {/* Corporate checkbox */}
+        <div className="form-check">
           <input
             type="checkbox"
             name="isCorporate"
+            className="form-check-input"
             checked={formData.isCorporate}
             onChange={handleInputChange}
           />
+          <label className="form-check-label">Corporate Customer</label>
         </div>
 
-        <div className="form-group">
-          <label>Newsletter Opt-in</label>
+        {/* Newsletter Opt-In checkbox */}
+        <div className="form-check">
           <input
             type="checkbox"
             name="isNewsletterOptIn"
+            className="form-check-input"
             checked={formData.isNewsletterOptIn}
             onChange={handleInputChange}
           />
+          <label className="form-check-label">Subscribe to Newsletter</label>
         </div>
 
+        {/* Locale field */}
         <div className="form-group">
-          <label>Locale Default</label>
+          <label>Locale</label>
           <input
             type="text"
             name="localeDefault"
@@ -154,13 +172,11 @@ const CustomerForm = () => {
           />
         </div>
 
+        {/* Submit button */}
         <button type="submit" className="btn btn-primary mt-3">
           Create Customer
         </button>
       </form>
-
-      {/* Render the AddressForm component only after customer is created */}
-      {customerId && <AddressForm customerId={customerId} />}
     </div>
   );
 };
