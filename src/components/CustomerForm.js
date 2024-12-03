@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import axios from 'axios';
 
 const CustomerForm = () => {
@@ -15,6 +16,7 @@ const CustomerForm = () => {
   });
 
   const [message, setMessage] = useState('');
+  const navigate = useNavigate(); // Initialize navigate hook
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -30,7 +32,9 @@ const CustomerForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/api/customers', formData);
-      setMessage(`Customer created successfully: ${response.data.id}`);
+      const customerId = response.data.id; // Assuming backend returns a customer ID
+      setMessage(`Customer created successfully: ${customerId}`);
+      navigate(`/customer/${customerId}`); // Redirect to the customer details page
     } catch (error) {
       console.error('Error creating customer:', error);
       setMessage('Failed to create customer. Please try again.');
@@ -138,7 +142,9 @@ const CustomerForm = () => {
             onChange={handleInputChange}
           />
         </div>
-        <button type="submit" className="btn btn-primary mt-3">Create Customer</button>
+        <button type="submit" className="btn btn-primary mt-3">
+          Create Customer
+        </button>
       </form>
     </div>
   );
