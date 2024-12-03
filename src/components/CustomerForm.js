@@ -15,11 +15,10 @@ const CustomerForm = () => {
     localeDefault: 'en-US',
   });
 
+  const [customerId, setCustomerId] = useState(null); // Store the customerId after creating a customer
   const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Handle input field changes
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -28,32 +27,31 @@ const CustomerForm = () => {
     });
   };
 
-  // Form submission handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
-    setError('');
     try {
+      // Send customer data to backend for profile creation
       const response = await axios.post(
         'https://vtex-backend-3.onrender.com/api/customers',
         formData
       );
-      const customerId = response.data.data.Id; // Adjust this based on the actual response structure
-      setMessage(`Customer profile created successfully! Customer ID: ${customerId}`);
+      
+      const customerId = response.data.data.Id; // Extract customer Id
+      setCustomerId(customerId); // Store the customerId
+      setMessage(`Customer created successfully: ${customerId}`);
+      
+      // Optionally navigate to another page
       navigate(`/customer/${customerId}`);
-    } catch (err) {
-      console.error('Error creating customer:', err.response?.data || err.message);
-      setError(
-        err.response?.data?.error || 'An error occurred while creating the customer profile.'
-      );
+    } catch (error) {
+      console.error('Error creating customer:', error);
+      setMessage('Failed to create customer. Please try again.');
     }
   };
 
   return (
     <div className="container mt-5">
       <h2>Create Customer Profile</h2>
-      {message && <div className="alert alert-success">{message}</div>}
-      {error && <div className="alert alert-danger">{error}</div>}
+      {message && <div className="alert alert-info">{message}</div>}
       <form onSubmit={handleSubmit}>
         {/* Email field */}
         <div className="form-group">
