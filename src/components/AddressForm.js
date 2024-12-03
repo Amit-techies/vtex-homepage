@@ -15,19 +15,22 @@ const AddressForm = ({ userId }) => {
     street: '',
     neighborhood: '',
     number: '',
-    userId,
+    userId, // userId passed from parent (customer ID)
   });
 
   const [message, setMessage] = useState('');
 
+  // Handle input change for all fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setAddressData({ ...addressData, [name]: value });
   };
 
+  // Handle form submission to create address
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Send address data including userId
       const response = await axios.post('https://vtex-backend-3.onrender.com/api/addresses', addressData);
       setMessage('Address created successfully.');
     } catch (error) {
@@ -106,6 +109,37 @@ const AddressForm = ({ userId }) => {
             value={addressData.number}
             onChange={handleInputChange}
             required
+          />
+        </div>
+        {/* Optional fields */}
+        <div className="form-group">
+          <label>Neighborhood</label>
+          <input
+            type="text"
+            name="neighborhood"
+            className="form-control"
+            value={addressData.neighborhood}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="form-group">
+          <label>Postal Code</label>
+          <input
+            type="text"
+            name="postalCode"
+            className="form-control"
+            value={addressData.postalCode}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="form-group">
+          <label>Complement</label>
+          <input
+            type="text"
+            name="complement"
+            className="form-control"
+            value={addressData.complement}
+            onChange={handleInputChange}
           />
         </div>
         <button type="submit" className="btn btn-primary mt-3">
