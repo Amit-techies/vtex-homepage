@@ -4,10 +4,10 @@ import CustomerForm from './components/CustomerForm';
 import AddressForm from './components/AddressForm';
 
 const App = () => {
-  const [customerId, setCustomerId] = useState(null); // State to store the created customer ID
+  const [customerId, setCustomerId] = useState(null); // State to store created customer ID
 
   const handleCustomerCreated = (id) => {
-    setCustomerId(id); // Set customer ID when customer is created
+    setCustomerId(id); // Set customer ID after creation
   };
 
   return (
@@ -24,13 +24,11 @@ const App = () => {
           {/* Route to add an address */}
           <Route
             path="/add-address"
-            element={
-              customerId ? (
-                <AddressForm userId={customerId} />
-              ) : (
-                <RedirectToCustomerForm />
-              )
-            }
+            element={customerId ? (
+              <AddressForm userId={customerId} />
+            ) : (
+              <RedirectToCustomerForm />
+            )}
           />
         </Routes>
       </div>
@@ -38,10 +36,11 @@ const App = () => {
   );
 };
 
+// Component to redirect to the Customer Form if no customer is created yet
 const RedirectToCustomerForm = () => {
   const navigate = useNavigate();
   React.useEffect(() => {
-    navigate('/');
+    navigate('/'); // Navigate to the customer creation page
   }, [navigate]);
   return null;
 };
