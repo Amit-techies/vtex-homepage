@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import CustomerForm from './CustomerForm'; // Import the CustomerForm component
-import CustomerPage from './CustomerPage'; // Import the CustomerPage component
+import CustomerForm from './components/CustomerForm'; // Import the CustomerForm component
+import CustomerPage from './components/CustomerPage'; // Import the CustomerPage component
 
 function App() {
   return (
