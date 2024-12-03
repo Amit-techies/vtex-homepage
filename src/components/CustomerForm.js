@@ -31,7 +31,7 @@ const CustomerForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/customers', formData);
+      const response = await axios.post('https://vtex-backend-3.onrender.com/api/customers', formData);
       const customerId = response.data.id; // Assuming backend returns a customer ID
       setMessage(`Customer created successfully: ${customerId}`);
       navigate(`/customer/${customerId}`); // Redirect to the customer details page

@@ -1,21 +1,19 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import CustomerForm from './components/CustomerForm';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import CustomerForm from './CustomerForm';
+import CustomerDetails from './CustomerDetails'; // Component to display customer details
 
 const App = () => {
   return (
     <Router>
-      <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-        <header className="mb-4">
-          <h1>Customer Management</h1>
-          <p>Create and update customer profiles in VTEX.</p>
-        </header>
-
+      <div>
+        <h1 className="text-center my-4">Customer Management</h1>
         <Routes>
           {/* Route for the customer creation form */}
           <Route path="/" element={<CustomerForm />} />
 
-         
+          {/* Route for the customer details page */}
+          <Route path="/customer/:id" element={<CustomerDetails />} />
         </Routes>
       </div>
     </Router>
