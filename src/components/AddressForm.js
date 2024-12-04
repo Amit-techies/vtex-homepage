@@ -15,21 +15,21 @@ const AddressForm = ({ userId }) => {
     street: '',
     neighborhood: '',
     number: '',
-    userId: userId, // Ensure the userId is correctly set
+    userId, // Ensure userId is added here
   });
 
   const [message, setMessage] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setAddressData({ ...addressData, [name]: value });
+    setAddressData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Address data:', addressData);
+    console.log('Address data:', addressData); // Debug log
     try {
-      const response = await axios.post('https://vtex-backend-3.onrender.com/api/addresses', addressData);
+      await axios.post('https://vtex-backend-3.onrender.com/api/addresses', addressData);
       setMessage('Address created successfully.');
     } catch (error) {
       console.error('Error creating address:', error.response?.data || error.message);
@@ -38,82 +38,22 @@ const AddressForm = ({ userId }) => {
   };
 
   return (
-    <div className="container mt-5">
-      <h2>Add Address</h2>
-      {message && <div className="alert alert-info">{message}</div>}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Address Name</label>
+    <form onSubmit={handleSubmit}>
+      {['addressName', 'city', 'state', 'street', 'number', 'postalCode', 'receiverName', 'reference'].map((field) => (
+        <div key={field} className="form-group">
+          <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
           <input
             type="text"
-            name="addressName"
+            name={field}
             className="form-control"
-            value={addressData.addressName}
+            value={addressData[field]}
             onChange={handleInputChange}
             required
           />
         </div>
-        <div className="form-group">
-          <label>Address Type</label>
-          <select
-            name="addressType"
-            className="form-control"
-            value={addressData.addressType}
-            onChange={handleInputChange}
-          >
-            <option value="residential">Residential</option>
-            <option value="commercial">Commercial</option>
-          </select>
-        </div>
-        <div className="form-group">
-          <label>City</label>
-          <input
-            type="text"
-            name="city"
-            className="form-control"
-            value={addressData.city}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>State</label>
-          <input
-            type="text"
-            name="state"
-            className="form-control"
-            value={addressData.state}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Street</label>
-          <input
-            type="text"
-            name="street"
-            className="form-control"
-            value={addressData.street}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Number</label>
-          <input
-            type="text"
-            name="number"
-            className="form-control"
-            value={addressData.number}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <button type="submit" className="btn btn-primary mt-3">
-          Add Address
-        </button>
-      </form>
-    </div>
+      ))}
+      <button type="submit" className="btn btn-primary mt-3">Add Address</button>
+    </form>
   );
 };
 
