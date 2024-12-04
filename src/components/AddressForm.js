@@ -27,15 +27,18 @@ const AddressForm = ({ userId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Address data:', addressData); // Debug log
+    console.log('Address creation data:', addressData);
+  
     try {
-      await axios.post('https://vtex-backend-3.onrender.com/api/addresses', addressData);
+      const response = await axios.post('https://vtex-backend-3.onrender.com/api/addresses', addressData);
+      console.log('Address creation response:', response.data);
       setMessage('Address created successfully.');
     } catch (error) {
       console.error('Error creating address:', error.response?.data || error.message);
       setMessage('Failed to create address.');
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit}>

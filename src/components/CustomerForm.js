@@ -31,19 +31,19 @@ const CustomerForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        'https://vtex-backend-3.onrender.com/api/customers',
-        formData
-      );
-
+      const response = await axios.post('https://vtex-backend-3.onrender.com/api/customers', formData);
       const newCustomerId = response.data.data.Id;
-      setCustomerId(newCustomerId); // Store the customerId
+  
+      console.log('Customer creation response:', response.data);
+  
+      setCustomerId(newCustomerId);
       setMessage('Customer created successfully!');
     } catch (error) {
       console.error('Error creating customer:', error.response?.data || error.message);
       setMessage('Failed to create customer. Please try again.');
     }
   };
+  
 
   return (
     <div className="container mt-5">
