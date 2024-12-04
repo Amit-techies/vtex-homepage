@@ -27,6 +27,7 @@ const AddressForm = ({ userId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Address data:', addressData);
     try {
       const response = await axios.post('https://vtex-backend-3.onrender.com/api/addresses', addressData);
       setMessage('Address created successfully.');
