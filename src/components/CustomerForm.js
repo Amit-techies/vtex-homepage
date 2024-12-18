@@ -32,17 +32,23 @@ const CustomerForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post('https://vtex-backend-3.onrender.com/api/customers', formData);
+  
+      console.log('Customer creation full response:', response.data); // Log entire response
       const newCustomerId = response.data.data.Id;
   
-      console.log('Customer creation response:', response.data);
+      if (!newCustomerId) {
+        throw new Error('Customer creation did not return a valid Id');
+      }
   
       setCustomerId(newCustomerId);
-      setMessage('Customer created successfully!');
+      setMessage(`Customer created successfully: ${newCustomerId}`);
     } catch (error) {
       console.error('Error creating customer:', error.response?.data || error.message);
       setMessage('Failed to create customer. Please try again.');
     }
   };
+  
+  
   
 
   return (

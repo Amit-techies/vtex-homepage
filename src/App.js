@@ -1,24 +1,15 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import CustomerForm from './components/CustomerForm';
-import CustomerPage from './components/CustomerPage';
-import AddressForm from './components/AddressForm';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './components/Home';
+import Profile from './components/Profile';
 
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Routes>
-          {/* Route for the customer registration form */}
-          <Route path="/" element={<CustomerForm />} />
-          
-          {/* Route for the customer details page */}
-          <Route path="/customer/:customerId" element={<CustomerPage />} />
-          
-          {/* Optional: A dedicated address creation route (if needed) */}
-          <Route path="/add-address/:customerId" element={<AddressForm />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
     </Router>
   );
 }
