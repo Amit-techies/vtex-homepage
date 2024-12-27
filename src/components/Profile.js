@@ -1,54 +1,59 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  const [profile, setProfile] = useState(null);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/');
-      return;
-    }
-
-    const fetchUserProfile = async () => {
-      try {
-        const response = await axios.get('https://vtex-backend-3.onrender.com/api/profile', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching profile:', error.response?.data || error.message);
-        alert('Session expired. Please login again.');
-        localStorage.removeItem('token');
-        navigate('/');
+  // Utility function to get the VtexIdclientAutCookie value
+  const getTokenFromCookie = () => {
+    const name = 'VtexIdclientAutCookie=';
+    const decodedCookie = document.cookie;
+    const cookieArr = decodedCookie.split(';');
+    for (let i = 0; i < cookieArr.length; i++) {
+      let c = cookieArr[i].trim();
+      if (c.indexOf(name) === 0) {
+        return c.substring(name.length, c.length);  // Returns token value
       }
-    };
+    }
+    return null; // Token not found
+  };
 
-    fetchUserProfile();
-  }, [navigate]);
+  // Fetch the profile on component mount
+  useEffect(() => {
+    const token = getTokenFromCookie();
+    if (token) {
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/api/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          setProfile(response.data);
+        })
+        .catch((error) => {
+          setError('Failed to fetch profile');
+          console.error(error);
+        });
+    } else {
+      setError('No token found. Please log in.');
+    }
+  }, []);
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div>
-      <h1>User Profile</h1>
-      {user ? (
+      <h2>Profile Information</h2>
+      {profile ? (
         <div>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Name:</strong> {user.firstName} {user.lastName}</p>
+          <p>Name: {profile.name}</p>
+          <p>Email: {profile.email}</p>
         </div>
       ) : (
         <p>Loading...</p>
       )}
-      <button onClick={() => {
-        localStorage.removeItem('token');
-        navigate('/');
-      }}>
-        Logout
-      </button>
     </div>
   );
 };

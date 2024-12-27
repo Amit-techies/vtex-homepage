@@ -1,52 +1,18 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
-const Home = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await axios.post('https://vtex-backend-3.onrender.com/api/login', {
-        email,
-        password,
-      });
-
-      localStorage.setItem('token', response.data.token);
-      alert('Login successful!');
-      navigate('/profile');
-    } catch (error) {
-      console.error('Login error:', error.response?.data || error.message);
-      alert('Login failed!');
-    }
+const Login = () => {
+  const handleLogin = () => {
+    const redirectUri = `${window.location.origin}/auth/callback`;
+    const loginUrl = `http://localhost:5000/auth/redirect?redirect_uri=${redirectUri}`;
+    window.location.href = loginUrl;
   };
 
   return (
     <div>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
+      <h1>Login Page</h1>
+      <button onClick={handleLogin}>Login with VTEX</button>
     </div>
   );
 };
 
-export default Home;
+export default Login;

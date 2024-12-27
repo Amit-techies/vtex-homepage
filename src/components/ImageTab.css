@@ -1,0 +1,61 @@
+.tabs-container {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .tabs-buttons {
+    margin-bottom: 15px;
+  }
+  
+  .tabs-buttons button {
+    margin: 0 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    transition: background 0.3s, color 0.3s;
+    border-radius: 10px;
+  }
+  
+  .tabs-buttons .active {
+    background: #4876bb;
+    color: white;
+    border-color: #4876bb;
+  }
+  
+  .tabs-content a {
+    display: block;
+    width: calc(33.333% - 20px);
+    overflow: hidden;
+    text-decoration: none;
+  }
+  
+  .tabs-content img {
+    width: 100%;
+    vertical-align: middle;
+    transition: transform 0.3s;
+  }
+  
+
+  
+  .tabs-content {
+    display: flex;
+    margin: 0 25px;
+    column-gap: 30px;
+    flex-wrap: wrap;
+}
+.imagecard {
+    overflow: hidden;
+}
+
+.tabs-content h4 {
+    text-decoration: none;
+    margin: 10px 0 0;
+    font-weight: 400;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #111;
+}
